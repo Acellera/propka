@@ -22,6 +22,6 @@ __all__ = ["atom", "bonds", "calculations", "conformation_container",
 from importlib.metadata import version as _metadata_version, PackageNotFoundError
 
 try:
-    __version__ = _metadata_version("propka")
+    __version__ = _metadata_version("acellera-propka")
 except PackageNotFoundError:
     __version__ = "0+untagged"

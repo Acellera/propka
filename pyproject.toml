@@ -1,6 +1,6 @@
 [project]
-name = "propka"
-description = "Heuristic pKa calculations with ligands"
+name = "acellera-propka"
+description = "Heuristic pKa calculations with ligands (Acellera fork)"
 authors = [{ name = "Jan H. Jensen", email = "jhjensen@chem.ku.dk" }]
 maintainers = [{ name = "Nathan Baker", email = "nathanandrewbaker@gmail.com" }]
 license = "LGPL-2.1"
@@ -26,7 +26,7 @@ dependencies = []
 
 [project.urls]
 Homepage = "http://propka.org"
-Repository = "https://github.com/jensengroup/propka"
+Repository = "https://github.com/Acellera/propka"
 Documentation = "https://propka.readthedocs.io"
 
 [project.scripts]
