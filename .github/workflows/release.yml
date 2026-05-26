@@ -49,6 +49,48 @@ jobs:
           password: ${{ secrets.PUBLIC_PYPI_API_TOKEN }}
           skip-existing: true
 
+  publish-to-conda:
+    name: Publish 📦 to anaconda.org
+    needs: publish-to-pypi
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # setuptools-scm needs full history
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniconda-version: "latest"
+          activate-environment: deploy-env
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: |
+          git config --global --add safe.directory '*'
+          conda install -y -c conda-forge anaconda-client rattler-build setuptools-scm
+
+      - name: Determine version from git tag
+        run: |
+          echo "PACKAGE_VERSION=$(python -m setuptools_scm)" >> "$GITHUB_ENV"
+
+      - name: Build conda package
+        run: |
+          rattler-build build \
+            --recipe ./package/recipe.yaml \
+            --output-dir ./pkg/ \
+            --no-include-recipe \
+            -c conda-forge
+
+      - name: Upload to anaconda.org
+        run: |
+          anaconda -t "${{ secrets.ANACONDA_TOKEN_BASIC }}" upload \
+            -u acellera \
+            --skip-existing \
+            ./pkg/noarch/acellera-propka-*.conda
+
   github-release:
     name: Sign with Sigstore and create GitHub Release
     needs: publish-to-pypi
